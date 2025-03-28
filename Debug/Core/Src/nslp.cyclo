@@ -1,0 +1,2 @@
+../Core/Src/nslp.c:12:16:receive_packet	8
+../Core/Src/nslp.c:61:6:send_packet	2
