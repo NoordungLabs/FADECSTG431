@@ -32,8 +32,15 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define SP		GPIO_PIN_9
+#define MUXE	GPIO_PIN_10
+#define MUXP1	GPIO_PIN_7
+#define MUXP2	GPIO_PIN_8
+#define MUXP3	GPIO_PIN_9
+#define MGO		GPIOC
+
 const uint8_t NUM_OF_SENSORS = 4;
-const int selectPins[3] = { GPIO_PIN_7, GPIO_PIN_8, GPIO_PIN_9 };
+const int selectPins[3] = { MUXP1, MUXP2, MUXP3 };
 const uint8_t RUNAVGAM = 5;
 
 struct Packet sendPacket;
@@ -85,15 +92,15 @@ void selectMuxPin(uint8_t pin) {
 	for (uint8_t j = 0; j < 3; j++) {
 		if (pin & (1 << j)) {
 			if (j == 2) {
-				HAL_GPIO_WritePin(GPIOC, selectPins[j], GPIO_PIN_SET);
+				HAL_GPIO_WritePin(MGO, selectPins[j], GPIO_PIN_SET);
 			} else {
-				HAL_GPIO_WritePin(GPIOC, selectPins[j], GPIO_PIN_SET);
+				HAL_GPIO_WritePin(MGO, selectPins[j], GPIO_PIN_SET);
 			}
 		} else {
 			if (j == 2) {
-				HAL_GPIO_WritePin(GPIOC, selectPins[j], GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(MGO, selectPins[j], GPIO_PIN_RESET);
 			} else {
-				HAL_GPIO_WritePin(GPIOC, selectPins[j], GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(MGO, selectPins[j], GPIO_PIN_RESET);
 			}
 		}
 	}
@@ -161,12 +168,12 @@ int main(void)
   MX_CRC_Init();
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, MUXE, GPIO_PIN_RESET);
 	for (uint8_t i = 0; i < 3; i++) {
 		if (i == 2) {
-			HAL_GPIO_WritePin(GPIOC, selectPins[i], GPIO_PIN_SET);
+			HAL_GPIO_WritePin(MGO, selectPins[i], GPIO_PIN_SET);
 		} else {
-			HAL_GPIO_WritePin(GPIOC, selectPins[i], GPIO_PIN_SET);
+			HAL_GPIO_WritePin(MGO, selectPins[i], GPIO_PIN_SET);
 		}
 	}
 
@@ -195,10 +202,10 @@ int main(void)
 
 		//Set main valve
 		if (c.state & (1 << 0)) {
-			 HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, 1);
+			 HAL_GPIO_WritePin(GPIOA, SP, 1);
 		}
 		else {
-			 HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, 0);
+			 HAL_GPIO_WritePin(GPIOA, SP, 0);
 		}
 
 		//Receive from Avr in format: {type, cmd};
